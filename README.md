@@ -2,6 +2,8 @@
 
 🌐 Live Website: https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app
 
+🎥 Demo Video: [![Click to watch demo](https://placehold.co/640x360/png?text=Click+to+watch+demo)](https://your-video-link.com)
+
 ⭐ Star this repository if you find it useful.
 
 ![React](https://img.shields.io/badge/React-19-blue)
@@ -140,28 +142,27 @@ graph TD
 
 ## Dashboard
 
-![Dashboard](screenshots/dashboard.png)
+[![Dashboard](screenshots/dashboard.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
 
 ## Workflow Builder
 
-![Workflow](screenshots/workflow-builder.png)
+[![Workflow](screenshots/workflow-builder.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
 
 ## Agent Builder
 
-![Agent](screenshots/agent-builder.png)
+[![Agent](screenshots/agent-builder.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
 
 ## Knowledge Base
 
-![Knowledge](screenshots/knowledge-base.png)
+[![Knowledge](screenshots/knowledge-base.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
 
 ## SVG Compiler
 
-![SVG](screenshots/svg-compiler.png)
+[![SVG](screenshots/svg-compiler.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
 
 ## Copilot
 
-![Copilot](screenshots/copilot.png)
-
+[![Copilot](screenshots/copilot.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
 
 ---
 
