@@ -142,27 +142,27 @@ graph TD
 
 ## Dashboard
 
-[![Dashboard](screenshots/dashboard.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
+[![Dashboard](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app/screenshots/dashboard.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
 
 ## Workflow Builder
 
-[![Workflow](screenshots/workflow-builder.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
+[![Workflow](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app/screenshots/workflow-builder.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
 
 ## Agent Builder
 
-[![Agent](screenshots/agent-builder.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
+[![Agent](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app/screenshots/agent-builder.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
 
 ## Knowledge Base
 
-[![Knowledge](screenshots/knowledge-base.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
+[![Knowledge](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app/screenshots/knowledge-base.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
 
 ## SVG Compiler
 
-[![SVG](screenshots/svg-compiler.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
+[![SVG](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app/screenshots/svg-compiler.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
 
 ## Copilot
 
-[![Copilot](screenshots/copilot.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
+[![Copilot](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app/screenshots/copilot.png)](https://ais-pre-xl6iobb6qbtloeu67rkecx-695032611408.asia-southeast1.run.app)
 
 ---
 

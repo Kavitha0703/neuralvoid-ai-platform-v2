@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Sparkles, MessageSquare, Play, Plus, Trash2, ArrowRight, User, HelpCircle, HardDrive, CheckCircle, Send, Badge, ShieldAlert } from "lucide-react";
 import { CustomAgent, KnowledgeBase, UserProfile, UsageRecord } from "../types";
+import { Skeleton } from "./Skeleton";
 
 interface AgentsProps {
   user: UserProfile | null;
@@ -295,7 +296,11 @@ export default function Agents({ user, onAddLog, onSetStatus, activeWorkspaceId 
             </div>
 
             {loading ? (
-              <p className="text-[10px] font-mono text-slate-500 text-center py-6">Syncing registry...</p>
+              <div className="space-y-2">
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
+              </div>
             ) : agents.length === 0 ? (
               <p className="text-[10px] text-slate-600 font-mono text-center py-6">No custom agents found.</p>
             ) : (

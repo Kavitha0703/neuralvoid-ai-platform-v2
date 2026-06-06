@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Play, Copy, Check, Info, Sparkles, Sliders, RotateCcw, AlertTriangle } from "lucide-react";
 import { TextGenConfig, UsageRecord } from "../types";
+import { saveDraft, getDraft } from "../utils";
 
 interface TextGeneratorProps {
   onAddLog: (record: UsageRecord) => void;
@@ -10,12 +11,19 @@ interface TextGeneratorProps {
 }
 
 export default function TextGenerator({ onAddLog, userId, customKey, onSetStatus }: TextGeneratorProps) {
-  const [config, setConfig] = useState<TextGenConfig>({
-    prompt: "Write a high-performance TypeScript debounce function and explain how the timeout state behaves.",
-    systemInstruction: "You are an elite senior technical trainer. Structure responses with crisp paragraphs, bullet lists, and robust inline code declarations.",
-    temperature: 0.7,
-    topP: 0.9,
+  const [config, setConfig] = useState<TextGenConfig>(() => {
+    const saved = getDraft("text_gen_draft");
+    return saved || {
+      prompt: "Write a high-performance TypeScript debounce function and explain how the timeout state behaves.",
+      systemInstruction: "You are an elite senior technical trainer. Structure responses with crisp paragraphs, bullet lists, and robust inline code declarations.",
+      temperature: 0.7,
+      topP: 0.9,
+    };
   });
+
+  useEffect(() => {
+    saveDraft("text_gen_draft", config);
+  }, [config]);
 
   const [output, setOutput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);

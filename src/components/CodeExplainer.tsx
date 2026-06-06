@@ -4,6 +4,7 @@ import {
   Play, RotateCcw, Lightbulb, Flame, Braces, Clipboard, HelpCircle, Cpu, Layers, HelpCircle as HelpIcon
 } from "lucide-react";
 import { CodeExplainerResult, UsageRecord } from "../types";
+import { saveDraft, getDraft } from "../utils";
 import Editor from "@monaco-editor/react";
 
 interface CodeExplainerProps {
@@ -67,9 +68,22 @@ interface ConsoleOutput {
 }
 
 export default function CodeExplainer({ onAddLog, userId, customKey, onSetStatus }: CodeExplainerProps) {
-  const [code, setCode] = useState<string>(CONST_SAMPLES[0].code);
-  const [language, setLanguage] = useState<string>("JavaScript");
-  const [depth, setDepth] = useState<string>("deep-dive");
+  const [draft, setDraft] = useState(() => {
+    const saved = getDraft("code_explainer_draft");
+    return saved || {
+      code: CONST_SAMPLES[0].code,
+      language: "JavaScript",
+      depth: "deep-dive"
+    };
+  });
+  
+  const [code, setCode] = useState<string>(draft.code);
+  const [language, setLanguage] = useState<string>(draft.language);
+  const [depth, setDepth] = useState<string>(draft.depth);
+
+  useEffect(() => {
+    saveDraft("code_explainer_draft", { code, language, depth });
+  }, [code, language, depth]);
 
   const [result, setResult] = useState<CodeExplainerResult | null>(null);
   const [loading, setLoading] = useState<boolean>(false);

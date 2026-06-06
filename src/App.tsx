@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { 
   Terminal, BarChart3, Edit3, Type, Sliders, FileSpreadsheet, FileQuestion, 
   HelpCircle, Settings as SettingsIcon, Menu, X, Clock, Wifi, Server, Sparkles, UserCheck,
   Key, BookOpen, History, ShieldCheck, Home, Archive, Layers, Folder, MessageSquare, Search, LogOut, RefreshCw
 } from "lucide-react";
 import { ActiveTab, UsageRecord, UserProfile } from "./types";
+import { getFromCache, setToCache } from "./utils";
 
 import Dashboard from "./components/Dashboard";
 import TextGenerator from "./components/TextGenerator";
@@ -35,6 +36,7 @@ import { CookieConsentManager } from "./components/CookieConsentManager";
 export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("landing");
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
@@ -62,6 +64,7 @@ export default function App() {
 
   // Global history logs
   const [history, setHistory] = useState<UsageRecord[]>([]);
+  const [isDashboardLoading, setIsDashboardLoading] = useState(true);
 
   // Active workspace state parameter
   const [activeWorkspaceId, setActiveWorkspaceId] = useState<string | null>(() => {
@@ -107,21 +110,58 @@ export default function App() {
 
   useEffect(() => {
     if (!globalSearch.trim()) return;
-    
-    // Fetch parallel indexing logs for accuracy!
-    Promise.all([
-      fetch(`/api/prompts/${userId}`).then(r => r.json()).catch(() => ({})),
-      fetch(`/api/knowledge-bases/${userId}`).then(r => r.json()).catch(() => ({})),
-      fetch(`/api/workflows/${userId}`).then(r => r.json()).catch(() => ({})),
-      fetch(`/api/agents/${userId}`).then(r => r.json()).catch(() => ({})),
-      fetch(`/api/sessions/${userId}`).then(r => r.json()).catch(() => ({})),
-    ]).then(([promptsData, kbsData, flowsData, agentsData, sessionsData]) => {
-      setSearchPrompts(promptsData.promptTemplates || []);
-      setSearchKbs(kbsData.knowledgeBases || []);
-      setSearchFlows(flowsData.workflows || []);
-      setSearchAgents(agentsData.agents || []);
-      setSearchSessions(sessionsData.savedSessions || []);
-    });
+
+    const cacheKeys = {
+      prompts: `prompts_${userId}`,
+      kbs: `kbs_${userId}`,
+      flows: `flows_${userId}`,
+      agents: `agents_${userId}`,
+      sessions: `sessions_${userId}`
+    };
+
+    const cached = {
+      prompts: getFromCache(cacheKeys.prompts),
+      kbs: getFromCache(cacheKeys.kbs),
+      flows: getFromCache(cacheKeys.flows),
+      agents: getFromCache(cacheKeys.agents),
+      sessions: getFromCache(cacheKeys.sessions)
+    };
+
+    if (cached.prompts && cached.kbs && cached.flows && cached.agents && cached.sessions) {
+      setSearchPrompts(cached.prompts);
+      setSearchKbs(cached.kbs);
+      setSearchFlows(cached.flows);
+      setSearchAgents(cached.agents);
+      setSearchSessions(cached.sessions);
+    } else {
+      // Fetch parallel indexing logs for accuracy!
+      Promise.all([
+        fetch(`/api/prompts/${userId}`).then(r => r.json()).catch(() => ({})),
+        fetch(`/api/knowledge-bases/${userId}`).then(r => r.json()).catch(() => ({})),
+        fetch(`/api/workflows/${userId}`).then(r => r.json()).catch(() => ({})),
+        fetch(`/api/agents/${userId}`).then(r => r.json()).catch(() => ({})),
+        fetch(`/api/sessions/${userId}`).then(r => r.json()).catch(() => ({})),
+      ]).then(([promptsData, kbsData, flowsData, agentsData, sessionsData]) => {
+        const data = {
+          prompts: promptsData.promptTemplates || [],
+          kbs: kbsData.knowledgeBases || [],
+          flows: flowsData.workflows || [],
+          agents: agentsData.agents || [],
+          sessions: sessionsData.savedSessions || []
+        };
+        setToCache(cacheKeys.prompts, data.prompts);
+        setToCache(cacheKeys.kbs, data.kbs);
+        setToCache(cacheKeys.flows, data.flows);
+        setToCache(cacheKeys.agents, data.agents);
+        setToCache(cacheKeys.sessions, data.sessions);
+
+        setSearchPrompts(data.prompts);
+        setSearchKbs(data.kbs);
+        setSearchFlows(data.flows);
+        setSearchAgents(data.agents);
+        setSearchSessions(data.sessions);
+      });
+    }
   }, [globalSearch, userId]);
 
   const getFilteredSearchResults = () => {
@@ -234,6 +274,22 @@ export default function App() {
 
   // Load audit history logs upon mounting or user identity swap
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+        e.preventDefault();
+        setSidebarOpen(prev => !prev);
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+        setSearchFocused(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  useEffect(() => {
     let active = true;
 
     async function loadData() {
@@ -272,6 +328,8 @@ export default function App() {
         }
       } catch (err) {
         console.error("Unable to load metrics history stream:", err);
+      } finally {
+        setIsDashboardLoading(false);
       }
     }
 
@@ -741,6 +799,7 @@ export default function App() {
                 <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
+                  ref={searchInputRef}
                   value={globalSearch}
                   onFocus={() => setSearchFocused(true)}
                   onBlur={() => setTimeout(() => setSearchFocused(false), 200)} // Delay overlay closure so click registers
@@ -864,7 +923,8 @@ export default function App() {
                 onNavigate={(tab) => {
                   setActiveTab(tab);
                   window.scrollTo({ top: 0, behavior: "smooth" });
-                }} 
+                }}
+                isLoading={isDashboardLoading}
               />
             )}
             

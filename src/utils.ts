@@ -28,3 +28,27 @@ export function formatTimeWithRelative(dateString: string | number | Date): stri
   const timeStr = date.toLocaleTimeString([], { hour12: false });
   return `${timeStr} (${relativeStr})`;
 }
+
+export const getFromCache = (key: string) => {
+  const cached = sessionStorage.getItem(key);
+  if (!cached) return null;
+  return JSON.parse(cached);
+};
+
+export const setToCache = (key: string, data: any) => {
+  sessionStorage.setItem(key, JSON.stringify(data));
+};
+
+export const saveDraft = (key: string, data: any) => {
+  localStorage.setItem(key, JSON.stringify(data));
+};
+
+export const getDraft = (key: string) => {
+  const draft = localStorage.getItem(key);
+  if (!draft) return null;
+  return JSON.parse(draft);
+};
+
+export const clearDraft = (key: string) => {
+  localStorage.removeItem(key);
+};

@@ -6,14 +6,16 @@ import {
   ShieldCheck, Activity, Heart, Info, TrendingDown
 } from "lucide-react";
 import { UsageRecord, UserProfile } from "../types";
+import { Skeleton } from "./Skeleton";
 
 interface DashboardProps {
   history: UsageRecord[];
   user: UserProfile | null;
   onNavigate: (tab: any) => void;
+  isLoading?: boolean;
 }
 
-export default function Dashboard({ history, user, onNavigate }: DashboardProps) {
+export default function Dashboard({ history, user, onNavigate, isLoading }: DashboardProps) {
   const [search, setSearch] = useState("");
   const [filterTool, setFilterTool] = useState<string>("all");
 
@@ -257,24 +259,28 @@ export default function Dashboard({ history, user, onNavigate }: DashboardProps)
             <p className="text-xs text-slate-400 mt-1">Real-time timeline analysis across selected core models</p>
           </div>
           <div className="h-64 w-full mt-6">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={trendData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="latencyGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.25}/>
-                    <stop offset="95%" stopColor="#22d3ee" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="name" stroke="#475569" fontSize={10} tickLine={false} />
-                <YAxis stroke="#475569" fontSize={10} tickLine={false} />
-                <Tooltip 
-                  contentStyle={{ background: "#0b1120", borderRadius: "12px", border: "1px solid #1e293b", color: "#f8fafc" }} 
-                  labelStyle={{ fontSize: "10px", color: "#22d3ee", fontFamily: "monospace" }} 
-                  itemStyle={{ fontSize: "11px", color: "#cbd5e1" }}
-                />
-                <Area name="Latency (ms)" type="monotone" dataKey="duration" stroke="#22d3ee" strokeWidth={2.5} fillOpacity={1} fill="url(#latencyGradient)" />
-              </AreaChart>
-            </ResponsiveContainer>
+            {isLoading ? (
+              <Skeleton className="h-full w-full" />
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={trendData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="latencyGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.25}/>
+                      <stop offset="95%" stopColor="#22d3ee" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="name" stroke="#475569" fontSize={10} tickLine={false} />
+                  <YAxis stroke="#475569" fontSize={10} tickLine={false} />
+                  <Tooltip 
+                    contentStyle={{ background: "#0b1120", borderRadius: "12px", border: "1px solid #1e293b", color: "#f8fafc" }} 
+                    labelStyle={{ fontSize: "10px", color: "#22d3ee", fontFamily: "monospace" }} 
+                    itemStyle={{ fontSize: "11px", color: "#cbd5e1" }}
+                  />
+                  <Area name="Latency (ms)" type="monotone" dataKey="duration" stroke="#22d3ee" strokeWidth={2.5} fillOpacity={1} fill="url(#latencyGradient)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            )}
           </div>
         </div>
 
@@ -287,7 +293,9 @@ export default function Dashboard({ history, user, onNavigate }: DashboardProps)
             <p className="text-xs text-slate-400 mt-1">Query shares dispatch statistics split by specialized agent gateways</p>
           </div>
           <div className="h-64 w-full mt-6 flex flex-col justify-between">
-            {stats.total === 0 ? (
+            {isLoading ? (
+              <Skeleton className="h-full w-full" />
+            ) : stats.total === 0 ? (
               <div className="text-center p-6 border border-dashed border-slate-800 rounded-xl w-full flex-1 flex flex-col justify-center">
                 <p className="text-xs text-slate-500 font-mono">Awaiting primary API actions before building distribution chart.</p>
               </div>
