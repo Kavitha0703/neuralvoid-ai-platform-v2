@@ -162,6 +162,7 @@ graph TD
 
 ![Copilot](screenshots/copilot.png)
 
+
 ---
 
 NeuralVoid was built to explore how modern AI SaaS platforms combine workflow automation, retrieval-augmented generation (RAG), prompt engineering, collaborative workspaces, and intelligent agents into a unified developer experience.
