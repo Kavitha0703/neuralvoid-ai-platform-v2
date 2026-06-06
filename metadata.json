@@ -1,0 +1,6 @@
+{
+  "name": "NeuralVoid",
+  "description": "A full-stack SaaS platform for AI workflows, knowledge retrieval, prompt engineering, and custom agent development.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
